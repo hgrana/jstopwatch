@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div class="wrapper">
+    <h1>Stopwatch</h1>
+    <h2>Vanilla JavaScript Stopwatch</h2>
+    <h3>Limit option to count up to a max time</h3>
+    <p>
+      <span id="minutes">00</span>:<span id="seconds">00</span>:<span id="tens">00</span>
+    </p>
+    <button id="button-start">Start</button>
+    <button id="button-stop">Stop</button>
+    <button id="button-reset">Reset</button>
+    <div class="limit-wrapper">
+      <div class="enable-limit">
+        <label>Limit</label><input id="limitEnabler" type="checkbox" />
+      </div>
+      <input id="minutesLimiter" type="number" placeholder="minutes" />
+      <input id="secondsLimiter" type="number" placeholder="seconds" />
+      <input id="tensLimiter" type="number" placeholder="tens" />
+    </div>
+    <h4>Based on: <a href="https://codepen.io/cathydutton/pen/xxpOOw" target="_blank" rel=”noopener noreferrer”>cathydutton JavaScript Stopwatch</a></h4>
+  </div>
+</body>
+
+<style>
+  .wrapper {
+    width: 500px;
+    display: block;
+    margin: 0 auto;
+    position: relative;
+    font-family: 'Courier New', Courier, monospace;
+    text-align: center;
+  }
+
+  .wrapper p {
+    margin: 50px 0;
+  }
+
+  .limit-wrapper {
+    margin-top: 25px;
+  }
+
+  .enable-limit {
+    margin-bottom: 15px;
+  }
+
+  .limit-wrapper input[type='number'] {
+    width: 100px;
+  }
+
+  #minutes, #seconds, #tens {
+    font-size: 35px;
+  }
+</style>
+
+<script>
+  window.onload = function () {
+    let seconds = 0;
+    let tens = 0;
+    let minutes = 0;
+    let appendTens = document.getElementById("tens");
+    let appendSeconds = document.getElementById("seconds");
+    let appendMinutes = document.getElementById("minutes")
+    let buttonStart = document.getElementById('button-start');
+    let buttonStop = document.getElementById('button-stop');
+    let buttonReset = document.getElementById('button-reset');
+    let Interval;
+
+    buttonStart.onclick = function () {
+      clearInterval(Interval);
+      Interval = setInterval(startTimer, 10);
+    }
+
+    buttonStop.onclick = function () {
+      clearInterval(Interval);
+    }
+
+    buttonReset.onclick = function () {
+      clearInterval(Interval);
+      tens = "00";
+      seconds = "00";
+      minutes = "00"
+      appendTens.innerHTML = tens;
+      appendSeconds.innerHTML = seconds;
+      appendMinutes.innerHTML = minutes;
+    }
+
+    function startTimer() {
+      tens++;
+
+      if (tens <= 9) {
+        appendTens.innerHTML = "0" + tens;
+      }
+
+      if (tens > 9) {
+        appendTens.innerHTML = tens;
+
+      }
+
+      if (tens > 99) {
+        console.log("seconds");
+        seconds++;
+        appendSeconds.innerHTML = "0" + seconds;
+        tens = 0;
+        appendTens.innerHTML = "0" + 0;
+      }
+
+      if (seconds > 9) {
+        appendSeconds.innerHTML = seconds;
+      }
+
+      if (seconds > 59) {
+        console.log("minutes");
+        minutes++;
+        appendMinutes.innerHTML = "0" + minutes;
+        seconds = 0;
+        appendSeconds.innerHTML = "0" + 0;
+      }
+
+      if (document.getElementById('limitEnabler').checked) {
+        const minutesLimit = parseInt(document.getElementById('minutesLimiter').value);
+        const secondsLimit = parseInt(document.getElementById('secondsLimiter').value);
+        const tensLimit = parseInt(document.getElementById('tensLimiter').value);
+
+        const minutesNow = parseInt(appendMinutes.innerHTML);
+        const secondsNow = parseInt(appendSeconds.innerHTML);
+        const tensNow = parseInt(appendTens.innerHTML);
+
+        if (minutesNow === minutesLimit && secondsNow === secondsLimit && tensNow === tensLimit) {
+          clearInterval(Interval);
+
+          return;
+        }
+      }
+    }
+  }
+</script>
+
+</html>
